@@ -1,0 +1,17 @@
+{
+	"type": "record",
+	"name": "user_value",
+	"namespace": "example.avro",
+	"fields": [
+		{
+			"name": "firstname",
+			"type": "string",
+			"doc": "First Name"
+		},
+		{
+			"name": "lastname",
+			"type": "string",
+			"doc": "Last Name"
+		}
+	]
+}

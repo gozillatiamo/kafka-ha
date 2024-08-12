@@ -1,0 +1,142 @@
+services:
+  controller-1:
+    image: bitnami/zookeeper:3.5
+    user: root
+    container_name: controller-1
+    environment:
+      ZOO_SERVER_ID: 1
+      ZOO_SERVERS: controller-1:2888:3888,controller-2:2888:3888,controller-3:2888:3888
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOO_PROMETHEUS_METRICS_PORT_NUMBER: 9101
+    volumes:
+      - .data/controller-1:/bitnami/zookeeper
+    networks:
+      - monitoring
+
+  controller-2:
+    image: bitnami/zookeeper:3.5
+    user: root
+    container_name: controller-2
+    environment:
+      ZOO_SERVER_ID: 2
+      ZOO_SERVERS: controller-1:2888:3888,controller-2:2888:3888,controller-3:2888:3888
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOO_PROMETHEUS_METRICS_PORT_NUMBER: 9101
+    volumes:
+      - .data/controller-2:/bitnami/zookeeper
+    networks:
+      - monitoring
+
+  controller-3:
+    image: bitnami/zookeeper:3.5
+    user: root
+    container_name: controller-3
+    environment:
+      ZOO_SERVER_ID: 3
+      ZOO_SERVERS: controller-1:2888:3888,controller-2:2888:3888,controller-3:2888:3888
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOO_PROMETHEUS_METRICS_PORT_NUMBER: 9101
+    volumes:
+      - .data/controller-3:/bitnami/zookeeper
+    networks:
+      - monitoring
+
+  broker-1:
+    image: bitnami/kafka:2.6.0 
+    user: root
+    container_name: broker-1
+    ports:
+      - 19092:19092
+    environment:
+      KAFKA_CFG_BROKER_ID: 4
+      KAFKA_CFG_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:19092'
+      KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-1:9092,PLAINTEXT_HOST://localhost:19092'
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_CFG_ZOOKEEPER_CONNECT: controller-1:2181,controller-2:2181,controller-3:2181
+      KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: 2
+      KAFKA_CFG_ACKS: all
+      KAFKA_CFG_FLUSH_MESSAGES: 100000 
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_ZOOKEEPER_PROTOCOL: PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - .data/broker-1:/bitnami/kafka
+    networks:
+      - monitoring
+
+  broker-2:
+    image: bitnami/kafka:2.6.0 
+    user: root
+    container_name: broker-2
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_CFG_BROKER_ID: 5
+      KAFKA_CFG_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:29092'
+      KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-2:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_CFG_ZOOKEEPER_CONNECT: controller-1:2181,controller-2:2181,controller-3:2181
+      KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: 2
+      KAFKA_CFG_ACKS: all
+      KAFKA_CFG_FLUSH_MESSAGES: 100000 
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_ZOOKEEPER_PROTOCOL: PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - .data/broker-2:/bitnami/kafka
+    networks:
+      - monitoring
+
+  broker-3:
+    image: bitnami/kafka:2.6.0 
+    user: root
+    container_name: broker-3
+    ports:
+      - 39092:39092
+    environment:
+      KAFKA_CFG_BROKER_ID: 6
+      KAFKA_CFG_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:39092'
+      KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-3:9092,PLAINTEXT_HOST://localhost:39092'
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_CFG_ZOOKEEPER_CONNECT: controller-1:2181,controller-2:2181,controller-3:2181
+      KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: 2
+      KAFKA_CFG_ACKS: all
+      KAFKA_CFG_FLUSH_MESSAGES: 100000 
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_ZOOKEEPER_PROTOCOL: PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - .data/broker-3:/bitnami/kafka
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true

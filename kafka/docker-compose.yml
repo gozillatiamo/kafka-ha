@@ -1,0 +1,264 @@
+services:
+# ========================= DC1 =========================
+  controller-1:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: controller-1
+    profiles:
+      - all
+      - dc1
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 10001
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_LISTENERS: CONTROLLER://:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      JMX_PORT: 9101
+    volumes:
+      - ./.data/controller-1:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+  broker-1:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: broker-1
+    profiles:
+      - all
+      - dc1
+    ports:
+      - 19092:19092
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 20001
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:19092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-1:9092,PLAINTEXT_HOST://localhost:19092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_ACKS: all
+      KAFKA_FLUSH_MESSAGES: 100000 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./.data/broker-1:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+  broker-4:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: broker-4
+    profiles:
+      - all
+      - dc1
+    ports:
+      - 49092:49092
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 20004
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:49092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-4:9092,PLAINTEXT_HOST://localhost:49092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_ACKS: all
+      KAFKA_FLUSH_MESSAGES: 100000 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./.data/broker-4:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+
+
+# ========================= DC2 =========================
+  controller-2:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: controller-2
+    profiles:
+      - all
+      - dc2
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 10002
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_LISTENERS: CONTROLLER://:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      JMX_PORT: 9101
+    volumes:
+      - ./.data/controller-2:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+  broker-2:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: broker-2
+    profiles:
+      - all
+      - dc2
+    ports:
+      - 29092:29092
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 20002
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-2:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_ACKS: all
+      KAFKA_FLUSH_MESSAGES: 100000 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./.data/broker-2:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+  broker-5:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: broker-5
+    profiles:
+      - all
+      - dc2
+    ports:
+      - 59092:59092
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 20005
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:59092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-5:9092,PLAINTEXT_HOST://localhost:59092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_ACKS: all
+      KAFKA_FLUSH_MESSAGES: 100000 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./.data/broker-5:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+# ========================= DC3 =========================
+  controller-3:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: controller-3
+    profiles:
+      - all
+      - dc3
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 10003
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_LISTENERS: CONTROLLER://:9093
+      # KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      JMX_PORT: 9101
+    volumes:
+      - ./.data/controller-3:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+  broker-3:
+    image: confluentinc/cp-kafka:7.7.0
+    user: root
+    container_name: broker-3
+    profiles:
+      - all
+      - dc3
+    ports:
+      - 39092:39092
+    environment:
+      CLUSTER_ID: xsF-wEF0QnWm4-_YeispBA
+      KAFKA_NODE_ID: 20003
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:39092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-3:9092,PLAINTEXT_HOST://localhost:39092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_ACKS: all
+      KAFKA_FLUSH_MESSAGES: 100000 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      JMX_PORT: 9101
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./.data/broker-3:/var/lib/kafka/data
+    networks:
+      - monitoring
+
+
+networks:
+  monitoring:
+    external: true

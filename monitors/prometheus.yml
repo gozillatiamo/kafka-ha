@@ -25,8 +25,8 @@ scrape_configs:
     scheme: http
     static_configs:
       - targets:
-        - jmx-exporter-broker:5556
-        - jmx-exporter-controller:5556
+        # - jmx-exporter-broker:5556
+        # - jmx-exporter-controller:5556
         - kafka-exporter:9308
         - kafka-minion:8080
         - broker-1:9200

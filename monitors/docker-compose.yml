@@ -58,7 +58,7 @@ services:
     ports:
       - 8081:8081
     environment:
-      SCHEMA_REGISTRY_KAFKA_BROKERS: 'PLAINTEXT://broker-1:9092'
+      SCHEMA_REGISTRY_KAFKA_BROKERS: 'PLAINTEXT://broker-1:9092,PLAINTEXT://broker-2:9092,PLAINTEXT://broker-3:9092,PLAINTEXT://broker-4:9092,PLAINTEXT://broker-5:9092'
       SCHEMA_REGISTRY_ADVERTISED_HOSTNAME: schema-registry:8081
       SCHEMA_REGISTRY_HOST_NAME: schema-registry 
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
@@ -81,7 +81,7 @@ services:
     depends_on:
       - schema-registry
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: 'broker-1:9092'
+      CONNECT_BOOTSTRAP_SERVERS: broker-1:9092,broker-2:9092,broker-3:9092,broker-4:9092,broker-5:9092
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_GROUP_ID: compose-connect-group
       CONNECT_CONFIG_STORAGE_TOPIC: _connect-configs
@@ -135,37 +135,37 @@ services:
     networks:
       - monitoring
 
-  jmx-exporter-broker:
-    image: bitnami/jmx-exporter:1.0.1
-    container_name: jmx-exporter-broker
-    profiles:
-      - all
-      - grafana 
-    ports:
-      - 9999:5556
-    command:
-      - "5556"
-      - exporter.yml
-    volumes:
-      - ./exporter/exporter-brokers.yml:/opt/bitnami/jmx-exporter/exporter.yml
-    networks:
-      - monitoring
+  # jmx-exporter-broker:
+  #   image: bitnami/jmx-exporter:1.0.1
+  #   container_name: jmx-exporter-broker
+  #   profiles:
+  #     - all
+  #     - grafana 
+  #   ports:
+  #     - 9999:5556
+  #   command:
+  #     - "5556"
+  #     - exporter.yml
+  #   volumes:
+  #     - ./exporter/exporter-brokers.yml:/opt/bitnami/jmx-exporter/exporter.yml
+  #   networks:
+  #     - monitoring
 
-  jmx-exporter-controller:
-    image: bitnami/jmx-exporter:1.0.1
-    container_name: jmx-exporter-controller
-    profiles:
-      - all
-      - grafana 
-    ports:
-      - 9998:5556
-    command:
-      - "5556"
-      - exporter.yml
-    volumes:
-      - ./exporter/exporter-controllers.yml:/opt/bitnami/jmx-exporter/exporter.yml
-    networks:
-      - monitoring
+  # jmx-exporter-controller:
+  #   image: bitnami/jmx-exporter:1.0.1
+  #   container_name: jmx-exporter-controller
+  #   profiles:
+  #     - all
+  #     - grafana 
+  #   ports:
+  #     - 9998:5556
+  #   command:
+  #     - "5556"
+  #     - exporter.yml
+  #   volumes:
+  #     - ./exporter/exporter-controllers.yml:/opt/bitnami/jmx-exporter/exporter.yml
+  #   networks:
+  #     - monitoring
 
   prometheus:
     image: bitnami/prometheus:2.54.0
@@ -178,8 +178,8 @@ services:
     depends_on:
       - kafka-exporter
       - kafka-minion
-      - jmx-exporter-broker
-      - jmx-exporter-controller
+      # - jmx-exporter-broker
+      # - jmx-exporter-controller
     volumes:
       - ./prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
     networks:

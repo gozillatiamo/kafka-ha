@@ -12,7 +12,7 @@ docker network create monitoring
 cd kafka && docker compose --profile all up -d
 ```
 
-OR
+OR to specific datacenter
 
 ```bash
 cd kafka && docker compose --profile dc1 up -d
@@ -25,6 +25,8 @@ cd kafka && docker compose --profile all up -d --scale {service_name}=0
 ```
 
 ## ZooKeeper
+
+Lagacy way
 
 ```bash
 cd kafka/zookeeper && docker compose up -d
@@ -65,7 +67,7 @@ kafka-console-consumer.sh \
 cd monitors & docker compose --profile all up -d
 ```
 
-### Start Confluent only
+### Start Confluent only (do not run this for now.)
 
 ```bash
 cd monitors & docker compose --profile confluent up -d

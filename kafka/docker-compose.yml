@@ -16,8 +16,10 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kraft-controller.yml
     volumes:
       - ./.data/controller-1:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
 
@@ -50,12 +52,12 @@ services:
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-1
-      - controller-2
-      - controller-3
     volumes:
       - ./.data/broker-1:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
 
@@ -88,16 +90,14 @@ services:
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-1
-      - controller-2
-      - controller-3
     volumes:
       - ./.data/broker-4:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
-
-
 
 # ========================= DC2 =========================
   controller-2:
@@ -116,8 +116,10 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kraft-controller.yml
     volumes:
       - ./.data/controller-2:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
 
@@ -150,12 +152,12 @@ services:
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
-      - controller-1
       - controller-2
-      - controller-3
     volumes:
       - ./.data/broker-2:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
 
@@ -188,12 +190,12 @@ services:
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
-      - controller-1
       - controller-2
-      - controller-3
     volumes:
       - ./.data/broker-5:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
 
@@ -215,8 +217,10 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kraft-controller.yml
     volumes:
       - ./.data/controller-3:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
 
@@ -249,15 +253,14 @@ services:
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
       JMX_PORT: 9101
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
-      - controller-1
-      - controller-2
       - controller-3
     volumes:
       - ./.data/broker-3:/var/lib/kafka/data
+      - ../jmx-exporter:/usr/share/jmx_exporter
     networks:
       - monitoring
-
 
 networks:
   monitoring:

@@ -35,14 +35,14 @@ cd kafka/zookeeper && docker compose up -d
 ## Create topic
 
 ```bash
-kafka-topics.sh --bootstrap-server localhost:19092 --topic user --create --partitions 3 --replication-factor 3
+kafka-topics.sh --bootstrap-server localhost:19092 --topic user --create --partitions 3 --replication-factor 4
 ```
 
 ## Producer connectivity
 
 ```bash
 kafka-console-producer.sh \
---broker-list localhost:19092,localhost:29092,localhost:39092 \
+--broker-list localhost:19092,localhost:29092,localhost:39092,localhost:49092,localhost:59092 \
 --topic user \
 --request-required-acks all \
 --property "parse.key=true" \
@@ -57,6 +57,16 @@ kafka-console-consumer.sh \
 --topic user \
 --group brokers \
 --property "print.key=true"
+```
+
+to consume from beginning
+
+```bash
+kafka-console-consumer.sh \
+--bootstrap-server localhost:19092,localhost:29092,localhost:39092,localhost:49092,localhost:59092 \
+--topic user \
+--property "print.key=true" \
+--from-beginning
 ```
 
 ## Management & Monitoring

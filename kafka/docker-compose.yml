@@ -3,7 +3,7 @@ services:
   controller-1:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: controller-1
+    container_name: dc1_controller-1
     profiles:
       - all
       - dc1
@@ -15,7 +15,6 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      # JMX_PORT: 9101
       # KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kraft-controller.yml
     volumes:
       - ./.data/controller-1:/var/lib/kafka/data
@@ -26,7 +25,7 @@ services:
   broker-1:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: broker-1
+    container_name: dc1_broker-1
     profiles:
       - all
       - dc1
@@ -43,15 +42,15 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 5
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 5
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 5
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_ACKS: all
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
-      # JMX_PORT: 9101
+      JMX_PORT: 9101
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-1
@@ -64,7 +63,7 @@ services:
   broker-4:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: broker-4
+    container_name: dc1_broker-4
     profiles:
       - all
       - dc1
@@ -81,15 +80,15 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 5
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 5
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 5
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_ACKS: all
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
-      # JMX_PORT: 9101
+      JMX_PORT: 9101
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-1
@@ -103,7 +102,7 @@ services:
   controller-2:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: controller-2
+    container_name: dc2_controller-2
     profiles:
       - all
       - dc2
@@ -115,7 +114,6 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      # JMX_PORT: 9101
       # KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kraft-controller.yml
     volumes:
       - ./.data/controller-2:/var/lib/kafka/data
@@ -126,7 +124,7 @@ services:
   broker-2:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: broker-2
+    container_name: dc2_broker-2
     profiles:
       - all
       - dc2
@@ -143,15 +141,15 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 5
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 5
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 5
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_ACKS: all
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
-      # JMX_PORT: 9101
+      JMX_PORT: 9101
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-2
@@ -164,7 +162,7 @@ services:
   broker-5:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: broker-5
+    container_name: dc2_broker-5
     profiles:
       - all
       - dc2
@@ -181,15 +179,15 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 5
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 5
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 5
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_ACKS: all
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
-      # JMX_PORT: 9101
+      JMX_PORT: 9101
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-2
@@ -203,7 +201,7 @@ services:
   controller-3:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: controller-3
+    container_name: dc3_controller-3
     profiles:
       - all
       - dc3
@@ -216,7 +214,6 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      # JMX_PORT: 9101
       # KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kraft-controller.yml
     volumes:
       - ./.data/controller-3:/var/lib/kafka/data
@@ -227,7 +224,7 @@ services:
   broker-3:
     image: confluentinc/cp-kafka:7.7.0
     user: root
-    container_name: broker-3
+    container_name: dc3_broker-3
     profiles:
       - all
       - dc3
@@ -244,15 +241,15 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 10001@controller-1:9093,10002@controller-2:9093,10003@controller-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 5
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 5
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 5
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_ACKS: all
       KAFKA_FLUSH_MESSAGES: 100000 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
-      # JMX_PORT: 9101
+      JMX_PORT: 9101
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-1.0.1.jar=9200:/usr/share/jmx_exporter/kafka-broker.yml
     depends_on:
       - controller-3

@@ -10,14 +10,14 @@ services:
       - 8080:8080
     depends_on:
       - schema-registry
-      - kafka-connect
+      # - kafka-connect
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker-1:9092,broker-2:9092,broker-3:9092,broker-4:9092,broker-5:9092
       KAFKA_CLUSTERS_0_METRICS_PORT: 9101
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
-      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
-      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
+      # KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
+      # KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
       DYNAMIC_CONFIG_ENABLED: 'true'
     networks:
       - monitoring
@@ -27,21 +27,20 @@ services:
     image: confluentinc/cp-enterprise-control-center:7.7.0
     container_name: control-center
     profiles:
-      - all
       - confluent
     ports:
       - 9021:9021
     depends_on:
       - schema-registry
-      - kafka-connect
+      # - kafka-connect
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: broker-1:9092,broker-2:9092,broker-3:9092,broker-4:9092,broker-5:9092
       CONTROL_CENTER_REPLICATION_FACTOR: 3
       # CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 12
       # CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 12
       # CONFLUENT_METRICS_TOPIC_REPLICATION: 3
-      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'kafka-connect:8083'
-      CONTROL_CENTER_CONNECT_HEALTHCHECK_ENDPOINT: '/connectors'
+      # CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'kafka-connect:8083'
+      # CONTROL_CENTER_CONNECT_HEALTHCHECK_ENDPOINT: '/connectors'
       CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       PORT: 9021
     networks:
@@ -73,7 +72,6 @@ services:
     image: confluentinc/cp-kafka-connect:7.7.0
     container_name: kafka-connect
     profiles:
-      - all
       - confluent
       - kafka-ui
     ports:
@@ -104,37 +102,6 @@ services:
       - monitoring
 
 # ========================= Prometeus & Grafana =========================
-  kafka-exporter:
-    image: bitnami/kafka-exporter:1.7.0
-    container_name: kafka-exporter
-    profiles:
-      - all
-      - grafana 
-    command:
-      - "--kafka.server=broker-1:9092"
-      - "--kafka.server=broker-2:9092"
-      - "--kafka.server=broker-3:9092"
-      - "--kafka.server=broker-4:9092"
-      - "--kafka.server=broker-5:9092"
-    ports:
-      - 9308:9308
-    networks:
-      - monitoring
-  
-  kafka-minion:
-    image: redpandadata/kminion:v2.2.8
-    container_name: kafka-minion
-    profiles:
-      - all
-      - grafana 
-    ports:
-      - 9309:8080
-    environment:
-      KAFKA_BROKERS: broker-1:9092,broker-2:9092,broker-3:9092,broker-4:9092,broker-5:9092
-    restart: unless-stopped
-    networks:
-      - monitoring
-
   # jmx-exporter-broker:
   #   image: bitnami/jmx-exporter:1.0.1
   #   container_name: jmx-exporter-broker
@@ -175,11 +142,6 @@ services:
       - grafana 
     ports:
       - 9090:9090
-    depends_on:
-      - kafka-exporter
-      - kafka-minion
-      # - jmx-exporter-broker
-      # - jmx-exporter-controller
     volumes:
       - ./prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
     networks:

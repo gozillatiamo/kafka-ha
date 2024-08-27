@@ -35,7 +35,7 @@ cd kafka/zookeeper && docker compose up -d
 ## Create topic
 
 ```bash
-kafka-topics.sh --bootstrap-server localhost:19092 --topic user --create --partitions 3 --replication-factor 4
+kafka-topics.sh --bootstrap-server localhost:19092 --topic user --create --partitions 3 --replication-factor 5
 ```
 
 ## Producer connectivity
